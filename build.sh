@@ -5,11 +5,23 @@ WARNING='\033[0;33m'
 DC='\033[0m'
 
 # Default variable values
-version=1.0.1
+version=1.0.2
 output_file=""
 s_setup=false
 s_cmake=false
 verbose=false
+run=false
+
+# Check if Homebrew is installed
+if ! command -v brew &> /dev/null; then
+    printf "${WARNING}"
+    printf "\n=============================================\n"
+    printf "=========== ${DC}HOME-BREW NOT FOUND${WARNING} ===========\n"
+    printf "=============================================\n"
+    printf "${DC}"
+    printf "Please install Homebrew from https://brew.sh/\n"
+    exit 1
+fi
 
 usage() {
     printf "${SUCCESS}"
@@ -19,6 +31,7 @@ usage() {
     printf "\nUsage: $0 [OPTIONS]\n"
     printf "Options:\n"
     printf " -h, --help      Display this help message.\n"
+    printf " -r, --run       Build and run.\n"
     printf " -v, --version   Display script version.\n"
     printf " -E, --skip-env  Skip environment preparation.\n"
     printf " -C, --no-cmake  Skip CMake build file generation.\n"
@@ -88,6 +101,16 @@ build(){
     make
 }
 
+run() {
+    printf "${SUCCESS}"
+    printf "\n=============================================\n"
+    printf "============== ${DC}RUNNING PROJECT${SUCCESS} ==============\n"
+    printf "=============================================\n"
+    printf "${DC}"
+
+    ./EMR-System
+}
+
 while [ $# -gt 0 ]; do
     case $1 in
         -h | --help)
@@ -97,6 +120,9 @@ while [ $# -gt 0 ]; do
         -v | --version)
             printf "Build script: $version\n"
             exit 0
+            ;;
+        -r* | --run)
+            run=true
             ;;
         -E* | --skip-env)
             s_setup=true
@@ -135,3 +161,7 @@ printf "\n=============================================\n"
 printf "============== ${DC}BUILD FINISHED${SUCCESS} ===============\n"
 printf "=============================================\n"
 printf "${DC}"
+
+if [ "$run" = true ]; then
+    run
+fi
