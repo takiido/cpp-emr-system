@@ -8,7 +8,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(SOURCES
     src/main.cpp
+    src/patient.cpp
     )
+
+# Include directories
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # Executable target
 add_executable(EMR-System ${SOURCES})
